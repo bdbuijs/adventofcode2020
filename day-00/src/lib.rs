@@ -1,9 +1,8 @@
 use nom::{
+    branch::alt,
     bytes::complete::tag,
-    character::{
-        complete::space1,
-        complete::{alpha1, newline, one_of},
-    },
+    character::complete::char as nomchar,
+    character::complete::{alpha1, newline, one_of, space0, space1},
     combinator::recognize,
     multi::{many1, separated_list1},
     IResult,

@@ -1,8 +1,10 @@
+use meval::Expr;
+
 use nom::{
     branch::alt,
     character::complete::{digit1, newline, one_of, space0},
     combinator::map_res,
-    multi::separated_list1,
+    multi::{many1, separated_list1},
     sequence::delimited,
     IResult,
 };
@@ -17,12 +19,10 @@ pub fn process_part1(input: &str) -> String {
 }
 
 pub fn process_part2(input: &str) -> String {
-    let input = parenthesise_input(input);
-    let d = parse_input(&input);
-    let (_, equations) = d.unwrap();
-    equations
+    let (_, exprs) = parse_input2(input).unwrap();
+    exprs
         .into_iter()
-        .map(|e| e.eval())
+        .map(|e| e.eval().unwrap() as isize)
         .sum::<isize>()
         .to_string()
 }
@@ -75,6 +75,18 @@ fn parenthesise_input(input: &str) -> String {
         result.chars().filter(|&c| c == ')').count()
     );
     result
+}
+
+fn parse_input2(input: &str) -> IResult<&str, Vec<Expr>> {
+    let (input, lines) = separated_list1(newline, parse_expr)(input)?;
+    Ok((input, lines))
+}
+
+fn parse_expr(input: &str) -> IResult<&str, Expr> {
+    let (input, expr) = many1(one_of("0123456789+*() "))(input)?;
+    let expr_str: String = expr.into_iter().collect();
+    let par_expr = parenthesise_input(&expr_str).parse().unwrap();
+    Ok((input, par_expr))
 }
 
 fn parse_input(input: &str) -> IResult<&str, Vec<Equation>> {
