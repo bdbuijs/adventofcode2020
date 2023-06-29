@@ -237,17 +237,6 @@ impl Tile {
     }
 }
 
-fn _print_pixels(v: &[Pixel]) {
-    println!("{}", v.iter().map(|p| p.char()).collect::<String>());
-}
-
-fn _print_tiles(v: &HashMap<usize, Tile>) {
-    println!(
-        "{}",
-        v.keys().map(|t| format!(" {} ", t)).collect::<String>()
-    )
-}
-
 #[derive(Clone, Hash)]
 struct TileVariant {
     top: Vec<Pixel>,
