@@ -1,5 +1,3 @@
-use std::collections::{HashMap, VecDeque};
-
 pub fn process_part1(input: &str) -> String {
     let mut cups: Vec<usize> = input
         .chars()
